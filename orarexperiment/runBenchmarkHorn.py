@@ -56,22 +56,30 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
                         
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
             returnString=runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            print("return code:")
             print(returnString+"\n")
+            print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
             returnString=runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            print("return code:")
             print(returnString+"\n")
+            print("\n")
                         
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
         else:
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
             returnString=runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            print("return code:")
             print(returnString+"\n")
+            print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
             returnString=runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            print("return code:")
             print(returnString+"\n")
+            print("\n")
                          
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
