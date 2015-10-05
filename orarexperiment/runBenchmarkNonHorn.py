@@ -48,8 +48,6 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
     return resultFiles
                    
 def runAll(tbox, aboxList, dl, timeout_in_minutes):
-    
-    
     for reasonerName in reasonerList:
                     # Run in horn 
         if reasonerName == "konclude":
@@ -57,13 +55,13 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
             returnString=runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             print("return code:")
-            print(returnString+"\n")
+            print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
             returnString=runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             print("return code:")
-            print(returnString+"\n")
+            print(returnString)
             print("\n")
                         
             resultFiles.append(outputFileAbstraction)
@@ -72,17 +70,19 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
             returnString=runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             print("return code:")
-            print(returnString+"\n")
+            print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
             returnString=runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             print("return code:")
-            print(returnString+"\n")
+            print(returnString)
             print("\n")
                          
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
+
+
 
 
                         
