@@ -58,12 +58,16 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
                         
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
             returnString=runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            if returnString=="timeout" or returnString=="error":
+                printStringToFile(returnString, outputFileAbstraction)
             print("return code:")
             print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
             returnString=runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            if returnString=="timeout" or returnString=="error":
+                printStringToFile(returnString, outputFileOWLReasoner)
             print("return code:")
             print(returnString)
             print("\n")
@@ -73,12 +77,16 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
         else:
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
             returnString=runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            if returnString=="timeout" or returnString=="error":
+                printStringToFile(returnString, outputFileAbstraction)
             print("return code:")
             print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
             returnString=runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            if returnString=="timeout" or returnString=="error":
+                printStringToFile(returnString, outputFileOWLReasoner)
             print("return code:")
             print(returnString)
             print("\n")
@@ -87,7 +95,10 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             resultFiles.append(outputFileOWLReasoner)
 
 
-                        
+def printStringToFile(stringToPrint, fileName):
+    with open(fileName, mode='a', encoding='utf-8') as aFile:
+        aFile.write(stringToPrint+"\n")              
+                  
 if __name__ == '__main__':
     if len(sys.argv) == 4:
         returnResultFiles = runBenchmark(sys.argv[1], sys.argv[2], sys.argv[3])

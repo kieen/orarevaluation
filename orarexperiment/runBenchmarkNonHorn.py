@@ -9,21 +9,21 @@ from runKonclude import runKonclude
 from runOrarWithOWLReasoner import runOrarWithOWLReasoner
 from runOWLReasoner import runOWLReasoner
 
-#kill all java and python3 and Konclude running by kientran
-#subprocess.call(['killall','-9','-u kientran','python3'])
-subprocess.call(['killall','-9','-u kientran','Konclude'])
-subprocess.call(['killall','-9','-u kientran','java'])
+# kill all java and python3 and Konclude running by kientran
+# subprocess.call(['killall','-9','-u kientran','python3'])
+subprocess.call(['killall', '-9', '-u kientran', 'Konclude'])
+subprocess.call(['killall', '-9', '-u kientran', 'java'])
 
-#mac
+# mac
 """orarJarFile = "/Users/kien/git/ORAR/target/orar.jar"
 owlRealizerJarFile = "/Users/kien/git/ORAR/target/owlrealizer.jar"
 log4jproperty = "/Users/kien/git/ORAR/target/log4j.properties"
 koncludePath = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude"
 port = "9191"
 """
-#frodo
+# frodo
 orarJarFile = "/data/kien/benchmark/software/orar.jar"
-owlRealizerJarFile ="/data/kien/benchmark/software/owlrealizer.jar"
+owlRealizerJarFile = "/data/kien/benchmark/software/owlrealizer.jar"
 log4jproperty = "/data/kien/benchmark/software/log4j.properties"
 koncludePath = "/data/kien/benchmark/software/Konclude"
 port = "9191"
@@ -49,17 +49,19 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
                    
 def runAll(tbox, aboxList, dl, timeout_in_minutes):
     for reasonerName in reasonerList:
-                    # Run in horn 
-        if reasonerName == "konclude":
-                        
+        if reasonerName == "konclude":        
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
-            returnString=runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            returnString = runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            if returnString == "timeout" or returnString == "error":
+                printStringToFile(returnString, outputFileAbstraction)
             print("return code:")
             print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
-            returnString=runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            returnString = runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            if returnString == "timeout" or returnString == "error":
+                printStringToFile(returnString, outputFileOWLReasoner)
             print("return code:")
             print(returnString)
             print("\n")
@@ -68,13 +70,17 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             resultFiles.append(outputFileOWLReasoner)
         else:
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
-            returnString=runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            returnString = runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            if returnString == "timeout" or returnString == "error":
+                printStringToFile(returnString, outputFileAbstraction)
             print("return code:")
             print(returnString)
             print("\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
-            returnString=runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            returnString = runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            if returnString == "timeout" or returnString == "error":
+                printStringToFile(returnString, outputFileOWLReasoner)
             print("return code:")
             print(returnString)
             print("\n")
@@ -83,7 +89,9 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             resultFiles.append(outputFileOWLReasoner)
 
 
-
+def printStringToFile(stringToPrint, fileName):
+    with open(fileName, mode='a', encoding='utf-8') as aFile:
+        aFile.write(stringToPrint + "\n")              
 
                         
 if __name__ == '__main__':
