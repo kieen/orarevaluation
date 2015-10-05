@@ -14,11 +14,20 @@ from runOWLReasoner import runOWLReasoner
 subprocess.call(['killall','-9','-u kientran','Konclude'])
 subprocess.call(['killall','-9','-u kientran','java'])
 
-orarJarFile = "/Users/kien/git/ORAR/target/orar.jar"
+#mac
+"""orarJarFile = "/Users/kien/git/ORAR/target/orar.jar"
 owlRealizerJarFile = "/Users/kien/git/ORAR/target/owlrealizer.jar"
 log4jproperty = "/Users/kien/git/ORAR/target/log4j.properties"
 koncludePath = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude"
 port = "9191"
+"""
+#frodo
+orarJarFile = "/data/kien/benchmark/software/orar.jar"
+owlRealizerJarFile ="/data/kien/benchmark/software/owlrealizer.jar"
+log4jproperty = "/data/kien/benchmark/software/log4j.properties"
+koncludePath = "/data/kien/benchmark/software/Konclude"
+port = "9191"
+
     
 reasonerList = ["konclude", "hermit", "fact", "pellet"]
 numberOfReasoner = len(reasonerList)
@@ -47,20 +56,24 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
         if reasonerName == "konclude":
                         
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
-            runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            returnString=runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            print(returnString+"\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
-            runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            returnString=runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            print(returnString+"\n")
                         
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
         else:
             outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
-            runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            returnString=runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
+            print(returnString+"\n")
                         
             outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
-            runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
-                        
+            returnString=runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
+            print(returnString+"\n")
+                         
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
 
