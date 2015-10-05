@@ -37,7 +37,7 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
                 print('tbox:' + tbox)
                 print('aboxList:' + aboxList)
                 runAll(tbox, aboxList, "horn", timeout_in_minutes)
-                runAll(tbox, aboxList, "nonhorn", timeout_in_minutes)
+            
     return resultFiles
                    
 def runAll(tbox, aboxList, dl, timeout_in_minutes):
