@@ -16,12 +16,12 @@ def runCommandWithTimeout(commandString, timeout_in_second):
         print("Command has finished")
         out, err = p.communicate()
         #print(out.decode('utf-8'))
-        print("Result is retrieved")
+        print(out.decode('utf-8'))
+        print(err.decode('utf-8'))
+        print("Result has retrieved")
         print("Runtime of this command: %.2f ms" % running_time)
         if p.returncode==0:
             #print("return code: %d " % p.returncode)
-            print(out.decode('utf-8'))
-            print(err.decode('utf-8'))
             return running_time
         else:
             return "error"
