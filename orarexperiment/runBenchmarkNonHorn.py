@@ -48,9 +48,13 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
     return resultFiles
                    
 def runAll(tbox, aboxList, dl, timeout_in_minutes):
+    aboxListBaseName = os.path.basename(aboxList);            
+    
     for reasonerName in reasonerList:
-        if reasonerName == "konclude":        
-            outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-konclude.result.txt"
+                    # Run in horn 
+        if reasonerName == "konclude":
+            
+            outputFileAbstraction = tbox+ "-" + aboxListBaseName + "-abstraction-with-konclude.result."+dl+".txt"
             returnString = runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileAbstraction)
@@ -58,7 +62,7 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             print(returnString)
             print("\n")
                         
-            outputFileOWLReasoner = tbox + "-" + dl + "-konclude.result.txt"
+            outputFileOWLReasoner = tbox+ "-" + aboxListBaseName + "-konclude.result."+dl+".txt"
             returnString = runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileOWLReasoner)
@@ -69,7 +73,7 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
         else:
-            outputFileAbstraction = tbox + "-" + dl + "-abstraction-with-" + reasonerName + ".result.txt"
+            outputFileAbstraction = tbox + "-" + aboxListBaseName + "-abstraction-with-" + reasonerName + ".result."+dl+".txt"
             returnString = runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileAbstraction)
@@ -77,7 +81,7 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             print(returnString)
             print("\n")
                         
-            outputFileOWLReasoner = tbox + "-" + dl + "-with-" + reasonerName + ".result.txt"
+            outputFileOWLReasoner = tbox + "-" + aboxListBaseName +"-" + reasonerName + ".result."+dl+".txt"
             returnString = runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileOWLReasoner)
