@@ -8,6 +8,10 @@ from runKonclude import runKonclude
 from runOrarWithOWLReasoner import runOrarWithOWLReasoner
 from runOWLReasoner import runOWLReasoner
 
+#kill all java and python3 and Konclude running by kientran
+#subprocess.call(['killall','-9','-u kientran','python3'])
+subprocess.call(['killall','-9','-u kientran','Konclude'])
+subprocess.call(['killall','-9','-u kientran','java'])
 
 orarJarFile = "/Users/kien/git/ORAR/target/orar.jar"
 owlRealizerJarFile = "/Users/kien/git/ORAR/target/owlrealizer.jar"
