@@ -34,6 +34,11 @@ resultFiles = []
 # run the benchmark and return all result file of Clipper and Rapid in tuple
 def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
    
+    #Create a sub folder in backupFolder
+    timeNow = time.strftime("%d_%m_%Y_%H_%M")
+    backupDir = sys.argv[3] 
+    newFolderInBackupDir = os.path.join(backupDir, "at" + timeNow);
+    os.makedirs(newFolderInBackupDir)
     # For each ontology, run reasoner and print out the result
     with open(ontologyList, encoding='utf-8') as ontListFile:
         for aline in ontListFile:
@@ -44,29 +49,42 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
                 aboxList = splitLine[1].strip()
                 print('tbox:' + tbox)
                 print('aboxList:' + aboxList)
-                runAll(tbox, aboxList, "horn", timeout_in_minutes)
+                runAll(tbox, aboxList, "horn", timeout_in_minutes,newFolderInBackupDir)
             
     return resultFiles
                    
-def runAll(tbox, aboxList, dl, timeout_in_minutes):
+def runAll(tbox, aboxList, dl, timeout_in_minutes, newFolderInBackupDir):
     
     aboxListBaseName = os.path.basename(aboxList);            
     for reasonerName in reasonerList:
-                    # Run in horn 
+ 
         if reasonerName == "konclude":
-            
+            #Run abstraction
+            subprocess.call(['killall','-9','-u kientran','Konclude'])
+            subprocess.call(['killall','-9','-u kientran','java'])
             outputFileAbstraction = tbox+ "-" + aboxListBaseName + "-abstraction-with-konclude.result."+dl+".txt"
             returnString = runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileAbstraction)
+            
+            print("Backup result is stored in:"+ newFolderInBackupDir)
+            shutil.copy(outputFileAbstraction, newFolderInBackupDir)
+            
             print("return code:")
             print(returnString)
             print("\n")
-                        
+            
+            #Run owlrealizer 
+            subprocess.call(['killall','-9','-u kientran','Konclude'])
+            subprocess.call(['killall','-9','-u kientran','java'])
             outputFileOWLReasoner = tbox+ "-" + aboxListBaseName + "-konclude.result."+dl+".txt"
             returnString = runKonclude(owlRealizerJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileOWLReasoner)
+            
+            print("Backup result is stored in:"+ newFolderInBackupDir)
+            shutil.copy(outputFileOWLReasoner, newFolderInBackupDir)   
+            
             print("return code:")
             print(returnString)
             print("\n")
@@ -74,18 +92,28 @@ def runAll(tbox, aboxList, dl, timeout_in_minutes):
             resultFiles.append(outputFileAbstraction)
             resultFiles.append(outputFileOWLReasoner)
         else:
+            #Run abstraction 
             outputFileAbstraction = tbox + "-" + aboxListBaseName + "-abstraction-with-" + reasonerName + ".result."+dl+".txt"
             returnString = runOrarWithOWLReasoner(orarJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileAbstraction)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileAbstraction)
+            
+            print("Backup result is stored in:"+ newFolderInBackupDir)
+            shutil.copy(outputFileAbstraction, newFolderInBackupDir)   
+            
             print("return code:")
             print(returnString)
             print("\n")
-                        
+            
+            #Run owlrealizer
             outputFileOWLReasoner = tbox + "-" + aboxListBaseName +"-" + reasonerName + ".result."+dl+".txt"
             returnString = runOWLReasoner(owlRealizerJarFile, log4jproperty, reasonerName, tbox, aboxList, dl, timeout_in_minutes, outputFileOWLReasoner)
             if returnString == "timeout" or returnString == "error":
                 printStringToFile(returnString, outputFileOWLReasoner)
+            
+            print("Backup result is stored in:"+ newFolderInBackupDir)
+            shutil.copy(outputFileOWLReasoner, newFolderInBackupDir)   
+            
             print("return code:")
             print(returnString)
             print("\n")
@@ -101,17 +129,10 @@ def printStringToFile(stringToPrint, fileName):
 if __name__ == '__main__':
     if len(sys.argv) == 4:
         returnResultFiles = runBenchmark(sys.argv[1], sys.argv[2], sys.argv[3])
-        timeNow = time.strftime("%d_%m_%Y_%H_%M")
-        backupDir = sys.argv[3] 
-        newFolder = os.path.join(backupDir, "at" + timeNow);
-        os.makedirs(newFolder)
-        
         print("#Result files:")
         for file in returnResultFiles:
             print(file)
-            shutil.copy(file, newFolder)
-
-        print("All results have a backup version in the folder:" + newFolder)
+        
     else:
         print("Please use only 3 arguments: ontologylist,  timeout in minutes,  backup-folder")
 # Test
