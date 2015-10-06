@@ -49,11 +49,11 @@ def runBenchmark(ontologyList, timeout_in_minutes, backupFolder):
                 aboxList = splitLine[1].strip()
                 print('tbox:' + tbox)
                 print('aboxList:' + aboxList)
-                runKonclude(tbox, aboxList, "nonhorn", timeout_in_minutes,newFolderInBackupDir)
+                runKoncludeBenchmarch(tbox, aboxList, "nonhorn", timeout_in_minutes,newFolderInBackupDir)
             
     return resultFiles
                    
-def runKonclude(tbox, aboxList, dl, timeout_in_minutes, newFolderInBackupDir):
+def runKoncludeBenchmarch(tbox, aboxList, dl, timeout_in_minutes, newFolderInBackupDir):
     
     aboxListBaseName = os.path.basename(aboxList);            
    
