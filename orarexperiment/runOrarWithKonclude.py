@@ -2,7 +2,7 @@ from runCommandWithTimeout import runCommandWithTimeout
 
 def runOrarWithKonclude(orarJarFile, log4jproperty, koncludePath, port, tbox, aboxList, dl, timeout_in_minutes, outputFile):
     commandString = ""
-    commandString += "java -jar -Xms50G -Xmx100G"
+    commandString += "java -jar -Xms100G -Xmx100G"
     commandString += " -Dlog4j.configuration=file:" + log4jproperty
     commandString += " " + orarJarFile
     commandString += " -reasoner konclude"
